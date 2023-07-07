@@ -7,6 +7,14 @@ using MediumClone.Application.Abstractions.Repositories;
 using MediumClone.Domain.AppUserEntity;
 using MediumClone.Infrastructure.Persistence;
 using MediumClone.Infrastructure.Persistence.Repositories;
+using MediumClone.Infrastructure.Authentication;
+using Microsoft.Extensions.Options;
+using MediumClone.Application.Common.Interfaces.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using MediumClone.Application.Common.Interfaces;
+using MediumClone.Infrastructure.Identity;
 
 namespace MediumClone.Infrastructure;
 
@@ -43,7 +51,7 @@ public static class DependencyInjection
 
 
         services
-            //  .AddAuth(configuration)
+              .AddAuth(configuration)
             .AddPersistance();
 
         return services;
@@ -54,6 +62,8 @@ public static class DependencyInjection
 
         //services.AddScoped<PublishDomainEventsInterceptor>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddScoped<IIdentityService, IdentityService>();
+
         // services.AddScoped<IProductCategoryRepository, ProductCategoryRepository>();
 
 
@@ -62,29 +72,29 @@ public static class DependencyInjection
 
 
 
-    // public static IServiceCollection AddAuth(
-    //         this IServiceCollection services,
-    //         ConfigurationManager configuration)
-    // {
-    //     var jwtSettings = new JwtSettings();
-    //     configuration.Bind(JwtSettings.SectionName, jwtSettings);
+    public static IServiceCollection AddAuth(
+            this IServiceCollection services,
+            ConfigurationManager configuration)
+    {
+        var jwtSettings = new JwtSettings();
+        configuration.Bind(JwtSettings.SectionName, jwtSettings);
 
-    //     services.AddSingleton(Options.Create(jwtSettings));
-    //     services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
+        services.AddSingleton(Options.Create(jwtSettings));
+        services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
 
-    //     services.AddAuthentication(defaultScheme: JwtBearerDefaults.AuthenticationScheme)
-    //         .AddJwtBearer(options => options.TokenValidationParameters = new TokenValidationParameters
-    //         {
-    //             ValidateIssuer = true,
-    //             ValidateAudience = true,
-    //             ValidateLifetime = true,
-    //             ValidateIssuerSigningKey = true,
-    //             ValidIssuer = jwtSettings.Issuer,
-    //             ValidAudience = jwtSettings.Audience,
-    //             IssuerSigningKey = new SymmetricSecurityKey(
-    //                 Encoding.UTF8.GetBytes(jwtSettings.Secret)),
-    //         });
+        services.AddAuthentication(defaultScheme: JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options => options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = jwtSettings.Issuer,
+                ValidAudience = jwtSettings.Audience,
+                IssuerSigningKey = new SymmetricSecurityKey(
+                    Encoding.UTF8.GetBytes(jwtSettings.Secret)),
+            });
 
-    //     return services;
-    // }
+        return services;
+    }
 }
