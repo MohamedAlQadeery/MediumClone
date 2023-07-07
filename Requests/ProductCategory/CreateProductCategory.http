@@ -1,0 +1,8 @@
+POST {{host}}/product-categories
+Content-Type: application/json
+
+{
+    "name": "third Cateogry",
+    "description": "Category 3 description",
+    "image": "https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"
+}
