@@ -35,6 +35,7 @@ public class AppDbContextInitialiser
     public async Task SeedAsync()
     {
 
+
         //check if already seeded
         if (_context.Users.Any())
         {
@@ -57,6 +58,7 @@ public class AppDbContextInitialiser
         if (_roleManager.Roles.All(r => r.Name != administratorRole.Name))
         {
             await _roleManager.CreateAsync(administratorRole);
+            await _roleManager.CreateAsync(new IdentityRole("user"));
 
         }
 

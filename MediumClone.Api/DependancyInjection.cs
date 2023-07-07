@@ -22,6 +22,8 @@ public static class DependancyInjection
         services.AddValidationFilter();
         services.AddSingleton<ProblemDetailsFactory, SalesAppProblemDetailsFactory>();
         services.AddScoped<IImageService, ImageService>();
+        services.AddAuthentication();
+        services.AddAuthorization();
 
 
         return services;

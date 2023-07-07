@@ -16,7 +16,7 @@ public class AppUser : IdentityUser
     public DateTime? UpdatedDateTime { get; set; }
     public bool IsActive { get; private set; } = true;
 
-    public string Bio { get; set; } = null!;
+    public string? Bio { get; set; }
     public string? Image { get; set; } = null!;
 
 

@@ -42,15 +42,8 @@ public class IdentityService : IIdentityService
     public async Task<ErrorOr<AppUser>> CreateUserAsync(AppUser user, string password)
     {
 
-
-        var roleExist = await _roleManager.RoleExistsAsync(AppUserRole.FromValue(user.AppUserRole).Name);
-        if (!roleExist)
-        {
-            return Error.Failure(code: "IdentityError", description: "Role not found");
-        }
-
         var result = await _userManager.CreateAsync(user, password);
-        await _userManager.AddToRoleAsync(user, AppUserRole.FromValue(user.AppUserRole).Name);
+        await _userManager.AddToRoleAsync(user, AppUserRole.User.Name);
 
 
         if (result.Succeeded)

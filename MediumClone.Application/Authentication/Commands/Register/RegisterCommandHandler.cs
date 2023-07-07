@@ -33,7 +33,9 @@ public class RegisterCommandHandler :
             LastName = command.LastName,
             Email = command.Email,
             Address = command.Address,
-            AppUserRole = AppUserRole.User
+            AppUserRole = AppUserRole.User,
+            UserName = command.Email
+
         };
 
         // 2. Create user (generate unique ID) & Persist to DB
