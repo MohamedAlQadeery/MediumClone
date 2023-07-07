@@ -10,9 +10,9 @@ public interface IIdentityService
 
     Task<bool> IsInRoleAsync(string userId, string role);
 
-    Task<bool> AuthorizeAsync(string userId, string policyName);
+    Task<bool> IsAuthorizeAsync(string userId, string policyName);
 
-    Task<ErrorOr<AppUser>> CreateUserAsync(AppUser user);
+    Task<ErrorOr<AppUser>> CreateUserAsync(AppUser user, string password);
 
 
     Task<ErrorOr<bool>> DeleteUserAsync(string userId);
