@@ -10,6 +10,10 @@ public class RegisterCommandValidator : AbstractValidator<RegisterCommand>
         RuleFor(x => x.LastName).NotEmpty();
         RuleFor(x => x.Email).NotEmpty().EmailAddress();
         RuleFor(x => x.Address).NotEmpty();
+        RuleFor(x => x.Address.City).NotEmpty();
+        RuleFor(x => x.Address.Country).NotEmpty();
+        RuleFor(x => x.Address.Street).NotEmpty();
+        RuleFor(x => x.Address.ZipCode).NotEmpty();
         RuleFor(x => x.Password).NotEmpty();
     }
 }

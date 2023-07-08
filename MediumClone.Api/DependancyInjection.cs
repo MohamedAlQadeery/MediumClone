@@ -24,7 +24,16 @@ public static class DependancyInjection
         services.AddScoped<IImageService, ImageService>();
         services.AddAuthentication();
         services.AddAuthorization();
-
+        services.AddCors(options =>
+           {
+               options.AddPolicy("AllowAllOrigins",
+                   builder =>
+                   {
+                       builder.AllowAnyOrigin()
+                              .AllowAnyMethod()
+                              .AllowAnyHeader();
+                   });
+           });
 
         return services;
     }
