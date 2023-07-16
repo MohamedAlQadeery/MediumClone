@@ -15,6 +15,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using MediumClone.Application.Common.Interfaces;
 using MediumClone.Infrastructure.Identity;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MediumClone.Infrastructure;
 
@@ -82,7 +83,7 @@ public static class DependencyInjection
         services.AddSingleton(Options.Create(jwtSettings));
         services.AddSingleton<IJwtTokenGenerator, JwtTokenGenerator>();
 
-        services.AddAuthentication(defaultScheme: JwtBearerDefaults.AuthenticationScheme)
+        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options => options.TokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuer = true,
@@ -95,6 +96,17 @@ public static class DependencyInjection
                     Encoding.UTF8.GetBytes(jwtSettings.Secret)),
             });
 
+        services.AddAuthorization(options =>
+        {
+            //fallback policy jwt
+            options.FallbackPolicy = new AuthorizationPolicyBuilder()
+                .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
+                .RequireAuthenticatedUser()
+                .Build();
+
+
+
+        });
         return services;
     }
 }

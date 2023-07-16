@@ -4,6 +4,7 @@ using MediatR;
 using MediumClone.Contracts.Authentication;
 using MediumClone.Application.Authentication.Commands.Register;
 using MediumClone.Application.Authentication.Queries.Login;
+using MediumClone.Application.Authentication.Queries.GetCurrentUser;
 
 namespace MediumClone.Api.EndpointDefinitions;
 public class AuthenticationEndpointDefinition : BaseEndpointDefinition, IEndpointDefintion
@@ -11,8 +12,10 @@ public class AuthenticationEndpointDefinition : BaseEndpointDefinition, IEndpoin
     public void RegisterEndpoints(WebApplication app)
     {
         var auth = app.MapGroup("/api/auth");
-        auth.MapPost("/register", Register);
-        auth.MapPost("/login", Login);
+        auth.MapPost("/register", Register).AllowAnonymous();
+        auth.MapPost("/login", Login).AllowAnonymous();
+        auth.MapGet("/user", GetCurrentUser);
+
         // // .AddEndpointFilter<ValidationFilter<CreateProductCategoryRequest>>();
 
 
@@ -34,6 +37,18 @@ public class AuthenticationEndpointDefinition : BaseEndpointDefinition, IEndpoin
     {
         var command = mapper.Map<LoginQuery>(request);
         var result = await mediatr.Send(command);
+
+        return result.Match(
+             resposne => TypedResults.Ok(mapper.Map<AuthenticationResponse>(resposne)),
+              errors => ResultsProblem(context, errors)
+          );
+    }
+
+
+    private async Task<IResult> GetCurrentUser(HttpContext context, ISender mediatr, IMapper mapper)
+    {
+
+        var result = await mediatr.Send(new GetCurrentUserQuery(context));
 
         return result.Match(
              resposne => TypedResults.Ok(mapper.Map<AuthenticationResponse>(resposne)),
