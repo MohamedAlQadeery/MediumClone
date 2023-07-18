@@ -27,13 +27,13 @@ var app = builder.Build();
         await initialiser.InitialiseAsync();
         await initialiser.SeedAsync();
     }
+    app.UseCors("CorsPolicy");
+
     app.UseHttpsRedirection();
     app.UseStaticFiles();
     app.UseAuthentication();
     app.UseAuthorization();
     app.RegisterEndpointDefinitions();
-    app.UseCors("AllowAllOrigins");
-
 
 
 
