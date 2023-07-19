@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using MediumClone.Domain.AppUserEntity;
 using MediumClone.Domain.ProductCategoryEntity;
+using MediumClone.Domain.TagEntity;
 
 namespace MediumClone.Infrastructure.Persistence;
 
@@ -18,6 +19,8 @@ public class AppDbContext : IdentityDbContext<AppUser>
         base.OnModelCreating(modelBuilder);
     }
 
+
+    public DbSet<Tag> Tags { get; set; } = null!;
 
 
 
