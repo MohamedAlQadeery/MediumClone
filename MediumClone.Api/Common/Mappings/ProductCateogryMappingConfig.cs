@@ -6,7 +6,7 @@ using MediumClone.Api.Contracts.ProductCategory.Request;
 using MediumClone.Application.ProductCategories.Commands;
 using MediumClone.Domain.ProductCategoryEntity;
 
-namespace DinnerNet.Api.Common.Mappings;
+namespace MediumClone.Api.Common.Mappings;
 
 public class ProductCateogryMappingConfig : IRegister
 {

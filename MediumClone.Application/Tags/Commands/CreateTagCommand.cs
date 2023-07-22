@@ -4,7 +4,7 @@ using MediumClone.Application.Abstractions.Repositories;
 using MediumClone.Domain.ProductCategoryEntity;
 using MediumClone.Domain.TagEntity;
 
-namespace MediumClone.Application.Tags.CreateTagCommand;
+namespace MediumClone.Application.Tags.Commands;
 public record CreateTagCommand(string Name)
 : IRequest<ErrorOr<Tag>>;
 

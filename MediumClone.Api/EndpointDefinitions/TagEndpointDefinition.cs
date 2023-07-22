@@ -8,11 +8,11 @@ using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using MediumClone.Api.Contracts.Tags;
-using MediumClone.Application.Tags.CreateTagCommand;
+using MediumClone.Application.Tags.Commands;
 using MediumClone.Domain.TagEntity;
 
 namespace MediumClone.Api.EndpointDefinitions;
-public class ProductCategoryEndpointDefinition : BaseEndpointDefinition, IEndpointDefintion
+public class TagEndpointDefinition : BaseEndpointDefinition, IEndpointDefintion
 {
     public void RegisterEndpoints(WebApplication app)
     {
@@ -22,7 +22,7 @@ public class ProductCategoryEndpointDefinition : BaseEndpointDefinition, IEndpoi
 
         // categories.MapGet("", GetAllProductCategories);
         // categories.MapGet("/{id}", GetProductCategoryById).WithName("GetProductCategoryById");
-        // categories.MapPut("/{id}", UpdateProductCategory);
+        tags.MapPut("/{id}", UpdateTag);
         // categories.MapDelete("/{id}", DeleteProductCategory);
     }
 
@@ -44,15 +44,15 @@ public class ProductCategoryEndpointDefinition : BaseEndpointDefinition, IEndpoi
     }
 
     //update product category
-    private async Task<IResult> UpdateProductCategory(HttpContext context, IMapper mapper,
-    ISender mediatr, int id, UpdateProductCategoryRequest request)
+    private async Task<IResult> UpdateTag(HttpContext context, IMapper mapper,
+    ISender mediatr, int id, UpdateTagRequest request)
     {
-        var command = mapper.Map<UpdateProductCategoryCommand>((request, id));
-        var productCategory = await mediatr.Send(command);
+        var command = mapper.Map<UpdateTagCommand>((request, id));
+        var tagUpdatedResult = await mediatr.Send(command);
 
-        return productCategory.Match(
+        return tagUpdatedResult.Match(
               //productCategory => Results.CreatedAtRoute("GetById", new { id = productCategory.Id }, productCategory),
-              productCategory => TypedResults.Ok(mapper.Map<ProductCategoryResponse>(productCategory)),
+              tagUpdated => TypedResults.Ok(tagUpdated),
               errors => ResultsProblem(context, errors)
           );
     }

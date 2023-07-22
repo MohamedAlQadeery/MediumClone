@@ -8,7 +8,7 @@ using MediumClone.Contracts.Authentication;
 using MediumClone.Domain.AppUserEntity.Enums;
 using MediumClone.Domain.Common.ValueObjects;
 
-namespace SalesApp.Api.Common.Mapping;
+namespace MediumClone.Api.Common.Mapping;
 
 public class AuthenticationMappingConfig : IRegister
 {

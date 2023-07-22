@@ -1,6 +1,6 @@
 using FluentValidation;
 using MediumClone.Application.Abstractions.Repositories;
-using MediumClone.Application.Tags.CreateTagCommand;
+using MediumClone.Application.Tags.Commands;
 
 namespace MediumClone.Application.ProductCategories.Commands;
 public class CreateTagCommandValidator : AbstractValidator<CreateTagCommand>
