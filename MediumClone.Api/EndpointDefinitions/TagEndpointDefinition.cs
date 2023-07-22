@@ -7,15 +7,17 @@ using MediumClone.Application.ProductCategories.Queries;
 using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-
+using MediumClone.Api.Contracts.Tags;
+using MediumClone.Application.Tags.CreateTagCommand;
+using MediumClone.Domain.TagEntity;
 
 namespace MediumClone.Api.EndpointDefinitions;
 public class ProductCategoryEndpointDefinition : BaseEndpointDefinition, IEndpointDefintion
 {
     public void RegisterEndpoints(WebApplication app)
     {
-        // var categories = app.MapGroup("/api/product-categories");
-        // categories.MapPost("/", CreateProductCategory);
+        var tags = app.MapGroup("/api/tags");
+        tags.MapPost("/", CreateTag);
         // // .AddEndpointFilter<ValidationFilter<CreateProductCategoryRequest>>();
 
         // categories.MapGet("", GetAllProductCategories);
@@ -26,14 +28,16 @@ public class ProductCategoryEndpointDefinition : BaseEndpointDefinition, IEndpoi
 
 
 
-    private async Task<IResult> CreateProductCategory(HttpContext context, ISender mediatr, IMapper mapper, CreateProductCategoryRequest request)
+    private async Task<IResult> CreateTag(HttpContext context, ISender mediatr, IMapper mapper,
+    CreateTagRequest request)
     {
-        var command = mapper.Map<CreateProductCategoryCommad>(request);
-        var productCategory = await mediatr.Send(command);
+        var command = mapper.Map<CreateTagCommand>(request);
+        var tag = await mediatr.Send(command);
 
-        return productCategory.Match(
-              productCategory => Results.CreatedAtRoute("GetProductCategoryById", new { id = productCategory.Id },
-               mapper.Map<ProductCategoryResponse>(productCategory)),
+        return tag.Match(
+             //   tag => Results.CreatedAtRoute("GetTagById", new { id = tag.Id },
+             //    mapper.Map<Tag>(tag)),
+             tagCreated => TypedResults.Ok(tagCreated),
               //productCategory => TypedResults.Ok(productCategory),
               errors => ResultsProblem(context, errors)
           );
