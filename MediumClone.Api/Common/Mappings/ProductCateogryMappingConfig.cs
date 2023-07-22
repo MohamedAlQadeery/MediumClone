@@ -3,7 +3,7 @@ using Azure.Core;
 using Mapster;
 using MediumClone.Api.Contracts.ProductCategory;
 using MediumClone.Api.Contracts.ProductCategory.Request;
-using MediumClone.Application.ProductCategories.Commands;
+using MediumClone.Application.Tags.Commands;
 using MediumClone.Domain.ProductCategoryEntity;
 
 namespace MediumClone.Api.Common.Mappings;

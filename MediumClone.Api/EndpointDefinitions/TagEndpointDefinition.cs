@@ -1,15 +1,16 @@
 using MediumClone.Api.Abstractions;
 using MediumClone.Api.Contracts.ProductCategory;
 using MediumClone.Api.Contracts.ProductCategory.Request;
-using MediumClone.Application.ProductCategories.Commands;
-using MediumClone.Application.ProductCategories.Commands.DeleteProductCategory;
-using MediumClone.Application.ProductCategories.Queries;
+using MediumClone.Application.Tags.Commands;
+using MediumClone.Application.Tags.Commands.DeleteProductCategory;
+using MediumClone.Application.Tags.Queries;
 using MapsterMapper;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using MediumClone.Api.Contracts.Tags;
 using MediumClone.Application.Tags.Commands;
 using MediumClone.Domain.TagEntity;
+using MediumClone.Application.Tags.Queries;
 
 namespace MediumClone.Api.EndpointDefinitions;
 public class TagEndpointDefinition : BaseEndpointDefinition, IEndpointDefintion
@@ -20,8 +21,8 @@ public class TagEndpointDefinition : BaseEndpointDefinition, IEndpointDefintion
         tags.MapPost("/", CreateTag);
         // // .AddEndpointFilter<ValidationFilter<CreateProductCategoryRequest>>();
 
-        // categories.MapGet("", GetAllProductCategories);
-        // categories.MapGet("/{id}", GetProductCategoryById).WithName("GetProductCategoryById");
+        tags.MapGet("", GetAllTags);
+        tags.MapGet("/{id}", GetTagById).WithName("GetById");
         tags.MapPut("/{id}", UpdateTag);
         tags.MapDelete("/{id}", DeleteTag);
     }
@@ -73,19 +74,19 @@ public class TagEndpointDefinition : BaseEndpointDefinition, IEndpointDefintion
 
 
 
-    private async Task<IResult> GetAllProductCategories(ISender mediatr, IMapper mapper)
+    private async Task<IResult> GetAllTags(ISender mediatr, IMapper mapper)
     {
-        var catgories = await mediatr.Send(new GetAllProductCategoriesQuery());
+        var tags = await mediatr.Send(new GetAllTagsQuery());
 
-        return TypedResults.Ok(mapper.Map<IEnumerable<ProductCategoryResponse>>(catgories));
+        return TypedResults.Ok(tags);
     }
 
-    private async Task<IResult> GetProductCategoryById(HttpContext context, IMapper mapper, ISender mediatr, int id)
+    private async Task<IResult> GetTagById(HttpContext context, IMapper mapper, ISender mediatr, int id)
     {
-        var categoryResult = await mediatr.Send(new GetProductCategoryByIdQuery(id));
+        var result = await mediatr.Send(new GetTagByIdQuery(id));
 
-        return categoryResult.Match(
-            category => TypedResults.Ok(mapper.Map<ProductCategoryResponse>(category)),
+        return result.Match(
+            tag => TypedResults.Ok(tag),
             errors => ResultsProblem(context, errors)
         );
     }

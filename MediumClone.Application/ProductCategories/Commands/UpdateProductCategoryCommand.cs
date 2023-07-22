@@ -4,7 +4,7 @@ using MediumClone.Domain.Common.DomainErrors;
 using MediumClone.Application.Abstractions.Repositories;
 using MediumClone.Domain.ProductCategoryEntity;
 
-namespace MediumClone.Application.ProductCategories.Commands;
+namespace MediumClone.Application.Tags.Commands;
 
 public record UpdateProductCategoryCommand(int Id, string Name, string Description, string? Image = null) :
 IRequest<ErrorOr<ProductCategory>>;

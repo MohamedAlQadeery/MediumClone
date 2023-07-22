@@ -2,7 +2,7 @@ using FluentValidation;
 using MediumClone.Application.Abstractions.Repositories;
 using MediumClone.Application.Tags.Commands;
 
-namespace MediumClone.Application.ProductCategories.Commands;
+namespace MediumClone.Application.Tags.Commands;
 public class UpdateTagCommandValidator : AbstractValidator<UpdateTagCommand>
 {
     private readonly IUnitOfWork _unitOfWork;
