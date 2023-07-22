@@ -23,7 +23,7 @@ public class TagEndpointDefinition : BaseEndpointDefinition, IEndpointDefintion
         // categories.MapGet("", GetAllProductCategories);
         // categories.MapGet("/{id}", GetProductCategoryById).WithName("GetProductCategoryById");
         tags.MapPut("/{id}", UpdateTag);
-        // categories.MapDelete("/{id}", DeleteProductCategory);
+        tags.MapDelete("/{id}", DeleteTag);
     }
 
 
@@ -58,15 +58,15 @@ public class TagEndpointDefinition : BaseEndpointDefinition, IEndpointDefintion
     }
 
 
-    private async Task<IResult> DeleteProductCategory(HttpContext context,
+    private async Task<IResult> DeleteTag(HttpContext context,
     ISender mediatr, int id)
     {
-        var command = new DeleteProductCategoryCommand(id);
+        var command = new DeleteTagCommand(id);
         var deleteResult = await mediatr.Send(command);
 
         return deleteResult.Match(
               //productCategory => Results.CreatedAtRoute("GetById", new { id = productCategory.Id }, productCategory),
-              productCategory => TypedResults.NoContent(),
+              tagDeleted => TypedResults.NoContent(),
               errors => ResultsProblem(context, errors)
           );
     }
