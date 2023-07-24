@@ -14,6 +14,8 @@ public class ArticlesMappingConfig : IRegister
 
 
 
+
+
         //config.NewConfig<ProductCategory, ProductCategoryResponse>()
         //    .Map(dest => dest.ProductsIds, src => src.Products.Select(x => x.Id).ToList());
 

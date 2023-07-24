@@ -14,8 +14,8 @@ public class TagEndpointDefinition : BaseEndpointDefinition, IEndpointDefintion
         tags.MapPost("/", CreateTag);
         // // .AddEndpointFilter<ValidationFilter<CreateProductCategoryRequest>>();
 
-        tags.MapGet("", GetAllTags);
-        tags.MapGet("/{id}", GetTagById).WithName("GetById");
+        tags.MapGet("", GetAllTags).AllowAnonymous();
+        tags.MapGet("/{id}", GetTagById).WithName("GetTagById").AllowAnonymous();
         tags.MapPut("/{id}", UpdateTag);
         tags.MapDelete("/{id}", DeleteTag);
     }
