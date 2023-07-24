@@ -12,7 +12,7 @@ public class Article : BaseEntity<int>
     public string Body { get; private set; } = null!;
 
     //many to one relation to AppUser
-    public int AuthorId { get; private set; }
+    public string AuthorId { get; private set; }
     public AppUser Author { get; private set; } = null!;
 
     //many to many relation to Tag 
@@ -23,7 +23,7 @@ public class Article : BaseEntity<int>
 
     }
 
-    private Article(string title, string body, int authorId, List<ArticleTag> articleTags)
+    private Article(string title, string body, string authorId, List<ArticleTag> articleTags)
     {
         Title = title;
         Body = body;
@@ -31,7 +31,7 @@ public class Article : BaseEntity<int>
         _articleTags = articleTags;
     }
 
-    public static Article Create(string title, string body, int authorId, List<ArticleTag> articleTags)
+    public static Article Create(string title, string body, string authorId, List<ArticleTag> articleTags)
     {
         return new Article(title, body, authorId, articleTags);
     }

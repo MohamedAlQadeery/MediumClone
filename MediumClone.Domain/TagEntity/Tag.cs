@@ -1,11 +1,15 @@
+using MediumClone.Domain.ArticleTagEntity;
 using MediumClone.Domain.Common.Entities;
 
 namespace MediumClone.Domain.TagEntity;
 
 public sealed class Tag : BaseEntity<int>
 {
+    private readonly List<ArticleTag> _articleTags = new();
 
     public string Name { get; private set; } = null!;
+    public IReadOnlyList<ArticleTag> ArticleTags => _articleTags.AsReadOnly();
+
 
 
 

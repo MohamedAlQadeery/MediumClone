@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using MediumClone.Domain.AppUserEntity.Enums;
 using MediumClone.Domain.Common.ValueObjects;
+using MediumClone.Domain.ArticleEntity;
 
 namespace MediumClone.Domain.AppUserEntity;
 
@@ -19,10 +20,16 @@ public class AppUser : IdentityUser
     public string? Bio { get; set; }
     public string? Image { get; set; } = null!;
 
+    public List<Article> Articles { get; private set; } = new();
+
 
     public void ToggleStatus()
     {
         IsActive = !IsActive;
     }
+
+
+
+
 
 }

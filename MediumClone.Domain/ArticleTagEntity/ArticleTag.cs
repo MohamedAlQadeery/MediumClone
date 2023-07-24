@@ -5,9 +5,9 @@ namespace MediumClone.Domain.ArticleTagEntity;
 
 public class ArticleTag
 {
-    public int ArticleId { get; set; }
+    public int ArticleId { get; private set; }
     public Article Article { get; private set; } = null!;
-    public int TagId { get; set; }
+    public int TagId { get; private set; }
     public Tag Tag { get; private set; } = null!;
 
     private ArticleTag()
