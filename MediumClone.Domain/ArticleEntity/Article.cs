@@ -23,32 +23,26 @@ public class Article : BaseEntity<int>
 
     }
 
-    private Article(string title, string body, string authorId, List<ArticleTag> articleTags)
+    private Article(string title, string body, string authorId)
     {
         Title = title;
         Body = body;
         AuthorId = authorId;
-        _articleTags = articleTags;
     }
 
-    public static Article Create(string title, string body, string authorId, List<ArticleTag> articleTags)
+    public static Article Create(string title, string body, string authorId)
     {
-        return new Article(title, body, authorId, articleTags);
-    }
-
-    public void Update(string title, string body, List<ArticleTag> articleTags)
-    {
-        Title = title;
-        Body = body;
-        _articleTags.Clear();
-        _articleTags.AddRange(articleTags);
+        return new Article(title, body, authorId);
     }
 
     public void Update(string title, string body)
     {
         Title = title;
         Body = body;
+
     }
+
+
 
     //add tags
     public void AddTags(List<ArticleTag> articleTags)
