@@ -1,16 +1,9 @@
 using MediumClone.Api.Abstractions;
-using MediumClone.Api.Contracts.ProductCategory;
-using MediumClone.Api.Contracts.ProductCategory.Request;
 using MediumClone.Application.Tags.Commands;
-using MediumClone.Application.Tags.Commands.DeleteProductCategory;
 using MediumClone.Application.Tags.Queries;
 using MapsterMapper;
 using MediatR;
-using Microsoft.AspNetCore.Mvc;
 using MediumClone.Api.Contracts.Tags;
-using MediumClone.Application.Tags.Commands;
-using MediumClone.Domain.TagEntity;
-using MediumClone.Application.Tags.Queries;
 
 namespace MediumClone.Api.EndpointDefinitions;
 public class TagEndpointDefinition : BaseEndpointDefinition, IEndpointDefintion
