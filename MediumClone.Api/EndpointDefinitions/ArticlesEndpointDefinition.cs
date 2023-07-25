@@ -37,7 +37,9 @@ public class ArticlesEndpointDefinition : BaseEndpointDefinition, IEndpointDefin
     {
         var result = await mediatr.Send(new GetAllArticlesQuery());
 
-        return TypedResults.Ok(mapper.Map<List<ArticleResponse>>(result));
+
+
+        return TypedResults.Ok(mapper.Map<GetAllArticlesResponse>(result));
     }
 
     private async Task<IResult> GetArticleById(HttpContext context, IMapper mapper, ISender mediatr, int id)

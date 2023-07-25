@@ -1,12 +1,13 @@
 using MediatR;
 using MediumClone.Application.Abstractions.Repositories;
+using MediumClone.Application.Articles.Common;
 using MediumClone.Domain.ArticleEntity;
 
 namespace MediumClone.Application.Articles.Queries;
 
-public record GetAllArticlesQuery() : IRequest<IReadOnlyList<Article>>;
+public record GetAllArticlesQuery() : IRequest<ArticlesResult>;
 
-public class GetAllArticlesQueryHandler : IRequestHandler<GetAllArticlesQuery, IReadOnlyList<Article>>
+public class GetAllArticlesQueryHandler : IRequestHandler<GetAllArticlesQuery, ArticlesResult>
 {
     private readonly IUnitOfWork _unitOfWork;
 
@@ -15,10 +16,13 @@ public class GetAllArticlesQueryHandler : IRequestHandler<GetAllArticlesQuery, I
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<IReadOnlyList<Article>> Handle(GetAllArticlesQuery request, CancellationToken cancellationToken)
+    public async Task<ArticlesResult> Handle(GetAllArticlesQuery request, CancellationToken cancellationToken)
     {
 
-        return await _unitOfWork.Articles.GetAllAsync();
+
+        var articles = await _unitOfWork.Articles.GetAllAsync();
+        var articlesCount = await _unitOfWork.Articles.CountAsync();
+        return new ArticlesResult(articles, articlesCount);
     }
 }
 
