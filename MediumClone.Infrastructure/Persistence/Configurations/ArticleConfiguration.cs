@@ -27,6 +27,7 @@ public class ArticleTagConfiguration : IEntityTypeConfiguration<ArticleTag>
         builder.HasKey(x => new { x.ArticleId, x.TagId });
         builder.HasOne(x => x.Article).WithMany(x => x.ArticleTags).HasForeignKey(x => x.ArticleId);
         builder.HasOne(x => x.Tag).WithMany(x => x.ArticleTags).HasForeignKey(x => x.TagId);
+        builder.Navigation(x => x.Tag).AutoInclude();
 
 
 

@@ -20,7 +20,7 @@ public class GetAllArticlesQueryHandler : IRequestHandler<GetAllArticlesQuery, A
     {
 
 
-        var articles = await _unitOfWork.Articles.GetAllAsync();
+        var articles = await _unitOfWork.Articles.GetAllAsync(new string[] { "Author" });
         var articlesCount = await _unitOfWork.Articles.CountAsync();
         return new ArticlesResult(articles, articlesCount);
     }
