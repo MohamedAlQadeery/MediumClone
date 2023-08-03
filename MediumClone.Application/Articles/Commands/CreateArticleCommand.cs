@@ -25,7 +25,7 @@ public class CreateArticleCommandValidator : AbstractValidator<CreateArticleComm
         _userManager = userManager;
 
 
-        RuleFor(x => x.Title).NotEmpty().MaximumLength(50);
+        RuleFor(x => x.Title).NotEmpty().MustAsync(BeUniqueName).MaximumLength(50);
         RuleFor(x => x.Body).NotEmpty().MaximumLength(500);
         RuleFor(x => x.AuthorId).NotEmpty().MustAsync(AuthorBeExist).WithMessage("The author does not exist");
         RuleFor(x => x.TagsId).NotEmpty().MustAsync(BeExist).WithMessage("All tags must be exist");
@@ -54,6 +54,13 @@ public class CreateArticleCommandValidator : AbstractValidator<CreateArticleComm
 
     }
 
+
+    public async Task<bool> BeUniqueName(string name, CancellationToken cancellationToken)
+    {
+        var tag = await _unitOfWork.Articles.FindAsync(a => a.Title == name);
+        return tag == null;
+
+    }
 
 }
 

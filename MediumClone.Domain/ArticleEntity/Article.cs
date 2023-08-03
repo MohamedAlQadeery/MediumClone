@@ -9,6 +9,7 @@ public class Article : BaseEntity<int>
 
     private readonly List<ArticleTag> _articleTags = new();
     public string Title { get; private set; } = null!;
+    public string Slug { get; private set; }
     public string Body { get; private set; } = null!;
 
     //many to one relation to AppUser
@@ -26,6 +27,7 @@ public class Article : BaseEntity<int>
     private Article(string title, string body, string authorId)
     {
         Title = title;
+        Slug = title.Replace(" ", "-").ToLower();
         Body = body;
         AuthorId = authorId;
     }
@@ -38,6 +40,7 @@ public class Article : BaseEntity<int>
     public void Update(string title, string body)
     {
         Title = title;
+        Slug = title.Replace(" ", "-").ToLower();
         Body = body;
 
     }
