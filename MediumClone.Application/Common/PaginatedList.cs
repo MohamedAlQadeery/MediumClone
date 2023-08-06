@@ -7,7 +7,9 @@ public class PaginatedList<T>
     public int CurrentPage { get; set; }
     public int ItemsPerPage { get; set; }
     public bool HasPreviousPage => CurrentPage > 1;
-    public bool HasNextPage => CurrentPage < TotalPages && TotalPages > 1;
+    // public bool HasNextPage => CurrentPage < TotalPages && TotalPages > 1;
+    public bool HasNextPage => CurrentPage * ItemsPerPage < TotalItems;
+
 
 
 

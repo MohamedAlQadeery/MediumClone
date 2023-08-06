@@ -1,9 +1,12 @@
 using MapsterMapper;
 using MediatR;
 using MediumClone.Api.Abstractions;
+using MediumClone.Api.Common;
 using MediumClone.Api.Contracts.Articles;
 using MediumClone.Application.Articles.Commands;
 using MediumClone.Application.Articles.Queries;
+using MediumClone.Application.Common;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MediumClone.Api.EndpointDefinitions;
 public class ArticlesEndpointDefinition : BaseEndpointDefinition, IEndpointDefintion
@@ -33,13 +36,13 @@ public class ArticlesEndpointDefinition : BaseEndpointDefinition, IEndpointDefin
     }
 
 
-    private async Task<IResult> GetAllArticles(ISender mediatr, IMapper mapper)
+    private async Task<IResult> GetAllArticles(ISender mediatr, IMapper mapper, [AsParameters] QueryParamters queryParams)
     {
-        var result = await mediatr.Send(new GetAllArticlesQuery());
+        var result = await mediatr.Send(new GetAllArticlesQuery(queryParams.PageNumber, queryParams.PageSize));
 
 
 
-        return TypedResults.Ok(mapper.Map<GetAllArticlesResponse>(result));
+        return TypedResults.Ok(mapper.Map<PaginatedList<ArticleResponse>>(result));
     }
 
     private async Task<IResult> GetArticleById(HttpContext context, IMapper mapper, ISender mediatr, int id)

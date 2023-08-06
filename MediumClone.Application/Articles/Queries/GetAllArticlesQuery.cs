@@ -1,13 +1,14 @@
 using MediatR;
 using MediumClone.Application.Abstractions.Repositories;
 using MediumClone.Application.Articles.Common;
+using MediumClone.Application.Common;
 using MediumClone.Domain.ArticleEntity;
 
 namespace MediumClone.Application.Articles.Queries;
 
-public record GetAllArticlesQuery() : IRequest<ArticlesResult>;
+public record GetAllArticlesQuery(int PageNumber, int PageSize) : IRequest<PaginatedList<Article>>;
 
-public class GetAllArticlesQueryHandler : IRequestHandler<GetAllArticlesQuery, ArticlesResult>
+public class GetAllArticlesQueryHandler : IRequestHandler<GetAllArticlesQuery, PaginatedList<Article>>
 {
     private readonly IUnitOfWork _unitOfWork;
 
@@ -16,13 +17,13 @@ public class GetAllArticlesQueryHandler : IRequestHandler<GetAllArticlesQuery, A
         _unitOfWork = unitOfWork;
     }
 
-    public async Task<ArticlesResult> Handle(GetAllArticlesQuery request, CancellationToken cancellationToken)
+    public async Task<PaginatedList<Article>> Handle(GetAllArticlesQuery request, CancellationToken cancellationToken)
     {
 
 
-        var articles = await _unitOfWork.Articles.GetAllAsync(new string[] { "Author" });
-        var articlesCount = await _unitOfWork.Articles.CountAsync();
-        return new ArticlesResult(articles, articlesCount);
+        var articles = await _unitOfWork.Articles
+        .GetAllWithPaginationAsync(request.PageNumber, request.PageSize, new string[] { "Author" });
+        return articles;
     }
 }
 
