@@ -38,7 +38,7 @@ public class ArticlesEndpointDefinition : BaseEndpointDefinition, IEndpointDefin
 
     private async Task<IResult> GetAllArticles(ISender mediatr, IMapper mapper, [AsParameters] QueryParamters queryParams)
     {
-        var result = await mediatr.Send(new GetAllArticlesQuery(queryParams.PageNumber, queryParams.PageSize));
+        var result = await mediatr.Send(new GetAllArticlesQuery(queryParams.Search, queryParams.PageNumber, queryParams.PageSize));
 
 
 

@@ -146,6 +146,22 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
 
     }
 
+
+    public async Task<PaginatedList<T>> GetAllWithPaginationAsync(IQueryable<T> query, int pageNumber, int pageSize, string[] includes = null)
+    {
+
+        if (includes != null)
+        {
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+        }
+
+        return await query.ToPagedListAsync(pageNumber, pageSize);
+
+    }
+
     public async Task<PaginatedList<T>> GetAllWithPaginationAsync(int pageNumber, int pageSize, string[] includes = null)
     {
         var query = _context.Set<T>().AsQueryable();
@@ -175,5 +191,25 @@ public class BaseRepository<T> : IBaseRepository<T> where T : class
 
         return await query.Where(match).ToPagedListAsync(pageNumber, pageSize);
 
+    }
+
+    public async Task<PaginatedList<T>> GetAllWithPaginationAsync(IQueryable<T> query, int pageNumber, int pageSize,
+        Expression<Func<T, bool>> match, string[] includes = null)
+    {
+        if (includes != null)
+        {
+            foreach (var include in includes)
+            {
+                query = query.Include(include);
+            }
+        }
+
+        return await query.Where(match).ToPagedListAsync(pageNumber, pageSize);
+
+    }
+
+    public IQueryable<T> GetQueryable()
+    {
+        return _context.Set<T>().AsQueryable();
     }
 }

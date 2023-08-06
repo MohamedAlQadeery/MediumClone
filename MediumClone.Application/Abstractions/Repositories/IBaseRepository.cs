@@ -29,7 +29,11 @@ public interface IBaseRepository<T> where T : class
     Task<T> GetLatestAsync(Expression<Func<T, bool>> match, Expression<Func<T, int>> order, string[] includes = null);
     Task<T> GetFirstAsync(string[] includes = null);
 
+    Task<PaginatedList<T>> GetAllWithPaginationAsync(IQueryable<T> query, int pageNumber, int pageSize, string[] includes = null);
     Task<PaginatedList<T>> GetAllWithPaginationAsync(int pageNumber, int pageSize, string[] includes = null);
     Task<PaginatedList<T>> GetAllWithPaginationAsync(int pageNumber, int pageSize, Expression<Func<T, bool>> match, string[] includes = null);
+    Task<PaginatedList<T>> GetAllWithPaginationAsync(IQueryable<T> query, int pageNumber, int pageSize, Expression<Func<T, bool>> match, string[] includes = null);
+
+    IQueryable<T> GetQueryable();
 
 }
