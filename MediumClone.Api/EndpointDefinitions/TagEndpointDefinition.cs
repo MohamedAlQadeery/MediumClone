@@ -15,6 +15,7 @@ public class TagEndpointDefinition : BaseEndpointDefinition, IEndpointDefintion
         // // .AddEndpointFilter<ValidationFilter<CreateProductCategoryRequest>>();
 
         tags.MapGet("", GetAllTags).AllowAnonymous();
+        tags.MapGet("/popular", GetPopularTags).AllowAnonymous();
         tags.MapGet("/{id}", GetTagById).WithName("GetTagById").AllowAnonymous();
         tags.MapPut("/{id}", UpdateTag);
         tags.MapDelete("/{id}", DeleteTag);
@@ -71,7 +72,7 @@ public class TagEndpointDefinition : BaseEndpointDefinition, IEndpointDefintion
     {
         var tags = await mediatr.Send(new GetAllTagsQuery());
 
-        return TypedResults.Ok(tags);
+        return TypedResults.Ok(mapper.Map<List<TagResponse>>(tags));
     }
 
     private async Task<IResult> GetTagById(HttpContext context, IMapper mapper, ISender mediatr, int id)
@@ -79,8 +80,15 @@ public class TagEndpointDefinition : BaseEndpointDefinition, IEndpointDefintion
         var result = await mediatr.Send(new GetTagByIdQuery(id));
 
         return result.Match(
-            tag => TypedResults.Ok(tag),
+            tag => TypedResults.Ok(mapper.Map<TagResponse>(tag)),
             errors => ResultsProblem(context, errors)
         );
+    }
+
+    private async Task<IResult> GetPopularTags(ISender mediatr, IMapper mapper)
+    {
+        var tags = await mediatr.Send(new GetPopularTagsQuery());
+
+        return TypedResults.Ok(mapper.Map<List<PopularTagResponse>>(tags));
     }
 }
