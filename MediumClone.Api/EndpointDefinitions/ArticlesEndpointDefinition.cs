@@ -16,6 +16,7 @@ public class ArticlesEndpointDefinition : BaseEndpointDefinition, IEndpointDefin
         var articles = app.MapGroup("/api/articles");
         articles.MapPost("/", CreateArticle);
         articles.MapGet("", GetAllArticles).AllowAnonymous();
+        articles.MapGet("/tag/{tagName}", GetAllArticlesByTag).AllowAnonymous();
         articles.MapGet("/{id}", GetArticleById).WithName("GetArticleById").AllowAnonymous();
     }
 
@@ -41,6 +42,18 @@ public class ArticlesEndpointDefinition : BaseEndpointDefinition, IEndpointDefin
 
 
         var result = await mediatr.Send(new GetAllArticlesQuery(mapper.Map<CommonQueryParams>(queryParams)));
+
+
+
+        return TypedResults.Ok(mapper.Map<PaginatedList<ArticleResponse>>(result));
+    }
+    private async Task<IResult> GetAllArticlesByTag(ISender mediatr, IMapper mapper, string tagName,
+     [AsParameters] QueryParamters queryParams)
+    {
+
+
+        var result = await mediatr.Send(new GetAllArticlesByTagQuery(tagName, queryParams.PageNumber ?? 1,
+        queryParams.PageSize ?? 10));
 
 
 
