@@ -19,6 +19,7 @@ public class FollowUserCommandValidator : AbstractValidator<FollowUserCommand>
         _userManager = userManager;
         RuleFor(x => x.FollowingUserId).NotEmpty().MustAsync(UserIdBeExist).WithMessage("User with this id doesn't exist");
         RuleFor(x => x.FollowedUserId).NotEmpty().MustAsync(UserIdBeExist).WithMessage("User with this id doesn't exist");
+        RuleFor(x => x).Must(UserCantFollowHimself).WithMessage("User can't follow himself");
         RuleFor(x => x).MustAsync(UserIsNotAlreadyFollowed).WithMessage("User is already followed");
 
 
@@ -37,6 +38,11 @@ public class FollowUserCommandValidator : AbstractValidator<FollowUserCommand>
         .FindAsync(f => f.FollowingUserId == command.FollowingUserId && f.FollowedUserId == command.FollowedUserId);
 
         return followingExist is null;
+    }
+
+    public bool UserCantFollowHimself(FollowUserCommand command)
+    {
+        return command.FollowedUserId != command.FollowingUserId;
     }
 }
 
