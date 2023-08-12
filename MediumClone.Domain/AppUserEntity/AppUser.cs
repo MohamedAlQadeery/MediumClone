@@ -35,32 +35,18 @@ public class AppUser : IdentityUser
     }
 
 
-    public ErrorOr<bool> FollowUser(string userIdToFollow)
+    public Following FollowUser(string userIdToFollow)
     {
-        var following = Followings.FirstOrDefault(f => f.FollowedUserId == userIdToFollow && f.FollowingUserId == Id);
-        if (following is not null)
-        {
-            return Errors.User.UserIsAlreadyFollowed;
-        }
-        else
-        {
-            Followings.Add(Following.Create(Id, userIdToFollow));
-            return true;
-        }
+        var newFollowing = Following.Create(Id, userIdToFollow);
+        Followings.Add(newFollowing);
+        return newFollowing;
+
     }
 
-    public ErrorOr<bool> UnfollowUser(string userIdToUnfollow)
+    public void UnfollowUser(string userIdToUnfollow)
     {
-        var following = Followings.FirstOrDefault(f => f.FollowedUserId == userIdToUnfollow && f.FollowingUserId == Id);
-        if (following is not null)
-        {
-            Followings.Remove(following);
-            return true;
-        }
-        else
-        {
-            return Errors.User.UserIsNotFollowed;
-        }
+        var following = Followings.FirstOrDefault(f => f.FollowedUserId == userIdToUnfollow && f.FollowingUserId == Id)!;
+        Followings.Remove(following);
     }
 
 
