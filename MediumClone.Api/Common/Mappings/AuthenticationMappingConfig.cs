@@ -1,6 +1,7 @@
 
 
 using Mapster;
+using MediumClone.Api.Contracts.Followings;
 using MediumClone.Application.Authentication.Commands.Register;
 using MediumClone.Application.Authentication.Common;
 using MediumClone.Application.Authentication.Queries.Login;
@@ -28,6 +29,9 @@ public class AuthenticationMappingConfig : IRegister
 
         config.NewConfig<AuthenticationResult, AuthenticationResponse>()
              .Map(dest => dest.Role, src => AppUserRole.FromValue(src.User.AppUserRole).Name)
+             .Map(dest => dest.FollowingsIds, src => src.User.Followings.Select(x => x.FollowedUserId).ToList())
+             .Map(dest => dest.FollowersIds, src => src.User.Followers.Select(x => x.FollowingUserId).ToList())
+
             .Map(dest => dest, src => src.User);
     }
 }

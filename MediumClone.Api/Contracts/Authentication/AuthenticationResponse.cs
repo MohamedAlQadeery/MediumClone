@@ -1,3 +1,5 @@
+using MediumClone.Api.Contracts.Followings;
+
 namespace MediumClone.Contracts.Authentication;
 
 public record AuthenticationResponse(
@@ -8,5 +10,7 @@ public record AuthenticationResponse(
     string Role,
     string Token,
     string Bio,
-    string Image
+    string Image,
+    List<string> FollowingsIds,
+    List<string> FollowersIds
     );
