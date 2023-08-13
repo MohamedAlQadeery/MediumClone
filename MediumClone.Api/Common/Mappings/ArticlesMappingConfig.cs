@@ -20,24 +20,6 @@ public class ArticlesMappingConfig : IRegister
                 .Map(dest => dest.Author, src => src.Author);
 
 
-
-        config.NewConfig<QueryParamters, CommonQueryParams>()
-            .Map(dest => dest.PageNumber, src => src.PageNumber ?? _defaultPageNumber)
-            .Map(dest => dest.PageSize, src => src.PageSize ?? _defaultPageSize)
-            .Map(dest => dest.Search, src => src.Search ?? string.Empty)
-            .Map(dest => dest.SortColumn, src => src.SortColumn ?? _defaultSortColumn)
-            .Map(dest => dest.SortOrder, src => src.SortOrder ?? _defaultSortOrder);
-
-
-
-
-
-
-
-
-
-
-
         //config.NewConfig<ProductCategory, ProductCategoryResponse>()
         //    .Map(dest => dest.ProductsIds, src => src.Products.Select(x => x.Id).ToList());
 

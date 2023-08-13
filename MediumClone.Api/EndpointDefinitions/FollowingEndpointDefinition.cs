@@ -8,6 +8,9 @@ using MediumClone.Application.Authentication.Queries.GetCurrentUser;
 using MediumClone.Application.Followings.Commands;
 using System.Security.Claims;
 using MediumClone.Api.Contracts.Followings;
+using MediumClone.Api.Common;
+using MediumClone.Application.Followings.Queries;
+using MediumClone.Application.Common;
 
 namespace MediumClone.Api.EndpointDefinitions;
 public class FollowingEndpointDefinition : BaseEndpointDefinition, IEndpointDefintion
@@ -17,6 +20,7 @@ public class FollowingEndpointDefinition : BaseEndpointDefinition, IEndpointDefi
         var auth = app.MapGroup("/api/followings/");
         auth.MapPost("/follow-user", FollowUser);
         auth.MapPost("/unfollow-user", UnFollowUser);
+        auth.MapGet("/get-followings", GetFollowings);
 
         // // .AddEndpointFilter<ValidationFilter<CreateProductCategoryRequest>>();
 
@@ -47,6 +51,16 @@ public class FollowingEndpointDefinition : BaseEndpointDefinition, IEndpointDefi
              resposne => TypedResults.NoContent(),
               errors => ResultsProblem(context, errors)
           );
+    }
+
+
+    private async Task<IResult> GetFollowings(HttpContext context, ISender mediatr, IMapper mapper,
+    [AsParameters] QueryParamters queryParams)
+    {
+        var currentUserId = context.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+        var result = await mediatr.Send(new GetFollowingsQuery(currentUserId!, mapper.Map<CommonQueryParams>(queryParams)));
+
+        return TypedResults.Ok(mapper.Map<PaginatedList<FollowingInfoResponse>>(result));
     }
 }
 
