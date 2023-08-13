@@ -43,11 +43,7 @@ public class AppUser : IdentityUser
 
     }
 
-    public void UnfollowUser(string userIdToUnfollow)
-    {
-        var following = Followings.FirstOrDefault(f => f.FollowedUserId == userIdToUnfollow && f.FollowingUserId == Id)!;
-        Followings.Remove(following);
-    }
+
 
 
 

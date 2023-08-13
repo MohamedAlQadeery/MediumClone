@@ -37,28 +37,19 @@ public class FollowingEndpointDefinition : BaseEndpointDefinition, IEndpointDefi
               errors => ResultsProblem(context, errors)
           );
     }
-    private async Task<IResult> UnFollowUser(HttpContext context, ISender mediatr, IMapper mapper, LoginRequest request)
+    private async Task<IResult> UnFollowUser(HttpContext context, ISender mediatr, IMapper mapper, UnFollowUserRequest request)
     {
-        var command = mapper.Map<LoginQuery>(request);
+        var currentUserId = context.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+        var command = new UnFollowUserCommand(currentUserId, request.UserId);
         var result = await mediatr.Send(command);
 
         return result.Match(
-             resposne => TypedResults.Ok(mapper.Map<AuthenticationResponse>(resposne)),
+             resposne => TypedResults.NoContent(),
               errors => ResultsProblem(context, errors)
           );
     }
-
-
-    private async Task<IResult> GetCurrentUser(HttpContext context, ISender mediatr, IMapper mapper)
-    {
-
-        var result = await mediatr.Send(new GetCurrentUserQuery(context));
-
-        return result.Match(
-             resposne => TypedResults.Ok(mapper.Map<AuthenticationResponse>(resposne)),
-              errors => ResultsProblem(context, errors)
-          );
-    }
-
-
 }
+
+
+
+
