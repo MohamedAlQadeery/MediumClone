@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using MapsterMapper;
 using MediatR;
 using MediumClone.Api.Abstractions;
@@ -16,6 +17,8 @@ public class ArticlesEndpointDefinition : BaseEndpointDefinition, IEndpointDefin
         var articles = app.MapGroup("/api/articles");
         articles.MapPost("/", CreateArticle);
         articles.MapGet("", GetAllArticles).AllowAnonymous();
+        articles.MapGet("/your-feed", GetYourFeedArticles);
+
         articles.MapGet("/tag/{tagName}", GetAllArticlesByTag).AllowAnonymous();
         articles.MapGet("/{id}", GetArticleById).WithName("GetArticleById").AllowAnonymous();
     }
@@ -68,5 +71,14 @@ public class ArticlesEndpointDefinition : BaseEndpointDefinition, IEndpointDefin
             article => TypedResults.Ok(mapper.Map<ArticleResponse>(article)),
             errors => ResultsProblem(context, errors)
         );
+    }
+
+    private async Task<IResult> GetYourFeedArticles(HttpContext context, ISender mediatr, IMapper mapper, [AsParameters] QueryParamters queryParams)
+    {
+        var currentUserId = context.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+
+        var result = await mediatr.Send(new GetYourFeedArticlesQuery(currentUserId!, mapper.Map<CommonQueryParams>(queryParams)));
+
+        return TypedResults.Ok(mapper.Map<PaginatedList<ArticleResponse>>(result));
     }
 }
