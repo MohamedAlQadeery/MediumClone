@@ -24,9 +24,15 @@ public class CommonMappingConfig : IRegister
 
         config.NewConfig<Following, FollowingInfoResponse>()
                 .Map(dest => dest.Id, src => src.FollowedUser.Id)
-                .Map(dest => dest.FirstName, src => src.FollowedUser.LastName)
+                .Map(dest => dest.FirstName, src => src.FollowedUser.FirstName)
                 .Map(dest => dest.LastName, src => src.FollowedUser.LastName)
                 .Map(dest => dest.Image, src => src.FollowedUser.Image);
+
+        config.NewConfig<Following, FollowerInfoResponse>()
+                .Map(dest => dest.Id, src => src.FollowingUser.Id)
+                .Map(dest => dest.FirstName, src => src.FollowingUser.FirstName)
+                .Map(dest => dest.LastName, src => src.FollowingUser.LastName)
+                .Map(dest => dest.Image, src => src.FollowingUser.Image);
 
 
 

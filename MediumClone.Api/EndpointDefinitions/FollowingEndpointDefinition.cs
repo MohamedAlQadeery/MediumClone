@@ -21,6 +21,8 @@ public class FollowingEndpointDefinition : BaseEndpointDefinition, IEndpointDefi
         auth.MapPost("/follow-user", FollowUser);
         auth.MapPost("/unfollow-user", UnFollowUser);
         auth.MapGet("/get-followings", GetFollowings);
+        auth.MapGet("/get-followers", GetFollowers);
+
 
         // // .AddEndpointFilter<ValidationFilter<CreateProductCategoryRequest>>();
 
@@ -61,6 +63,15 @@ public class FollowingEndpointDefinition : BaseEndpointDefinition, IEndpointDefi
         var result = await mediatr.Send(new GetFollowingsQuery(currentUserId!, mapper.Map<CommonQueryParams>(queryParams)));
 
         return TypedResults.Ok(mapper.Map<PaginatedList<FollowingInfoResponse>>(result));
+    }
+
+    private async Task<IResult> GetFollowers(HttpContext context, ISender mediatr, IMapper mapper,
+    [AsParameters] QueryParamters queryParams)
+    {
+        var currentUserId = context.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+        var result = await mediatr.Send(new GetFollowersQuery(currentUserId!, mapper.Map<CommonQueryParams>(queryParams)));
+
+        return TypedResults.Ok(mapper.Map<PaginatedList<FollowerInfoResponse>>(result));
     }
 }
 
