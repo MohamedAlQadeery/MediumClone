@@ -1,5 +1,6 @@
 using Mapster;
 using MediumClone.Api.Contracts.Articles;
+using MediumClone.Application.Articles.Commands;
 using MediumClone.Application.Common;
 using MediumClone.Domain.ArticleEntity;
 
@@ -14,6 +15,10 @@ public class ArticlesMappingConfig : IRegister
 
     public void Register(TypeAdapterConfig config)
     {
+        config.NewConfig<(string userId, CreateArticleRequest request), CreateArticleCommand>()
+            .Map(dest => dest.AuthorId, src => src.userId)
+            .Map(dest => dest, src => src.request);
+
         config.NewConfig<Article, ArticleResponse>()
                 .Map(dest => dest.TagNames, src => src.ArticleTags.Select(at => at.Tag.Name).ToList())
                 .Map(dest => dest.Author.FullName, src => $"{src.Author.FirstName} {src.Author.LastName}")

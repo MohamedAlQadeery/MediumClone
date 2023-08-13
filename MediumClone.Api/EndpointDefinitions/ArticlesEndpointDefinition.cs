@@ -27,7 +27,9 @@ public class ArticlesEndpointDefinition : BaseEndpointDefinition, IEndpointDefin
     private async Task<IResult> CreateArticle(HttpContext context, ISender mediatr, IMapper mapper,
  CreateArticleRequest request)
     {
-        var command = mapper.Map<CreateArticleCommand>(request);
+        var currentUserId = context.User.Claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;
+
+        var command = mapper.Map<CreateArticleCommand>((currentUserId, request));
         var result = await mediatr.Send(command);
 
         return result.Match(
