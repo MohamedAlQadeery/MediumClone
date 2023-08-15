@@ -29,7 +29,8 @@ public class GetYourFeedArticlesQueryHandler : IRequestHandler<GetYourFeedArticl
                             .Where(f => userFollowingsIds.Contains(f.AuthorId) || f.AuthorId == currentUser.Id);
 
 
-        var result = await _unitOfWork.Articles.GetAllWithPaginationAsync(articlesQuery, request.Params.PageNumber, request.Params.PageSize);
+        var result = await _unitOfWork.Articles.GetAllWithPaginationAsync(articlesQuery, request.Params.PageNumber,
+         request.Params.PageSize, new string[] { "Author" });
         return result;
     }
 }
