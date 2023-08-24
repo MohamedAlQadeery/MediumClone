@@ -20,7 +20,7 @@ public class GetArticleIdQueryHandler : IRequestHandler<GetArticleByIdQuery, Err
 
     public async Task<ErrorOr<Article>> Handle(GetArticleByIdQuery request, CancellationToken cancellationToken)
     {
-        var Article = await _unitOfWork.Articles.GetByIdAsync(request.Id);
+        var Article = await _unitOfWork.Articles.FindAsync(a => a.Id == request.Id, new string[] { "Author" });
         if (Article is null)
         {
             return Errors.Common.NotFound;
