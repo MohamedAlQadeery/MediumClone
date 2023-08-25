@@ -21,7 +21,7 @@ public class ArticlesEndpointDefinition : BaseEndpointDefinition, IEndpointDefin
 
         articles.MapGet("/tag/{tagName}", GetAllArticlesByTag).AllowAnonymous();
         articles.MapGet("/{id}", GetArticleById).WithName("GetArticleById").AllowAnonymous();
-        articles.MapDelete("/{slug}", DeleteArticle).WithName("DeleteArticle");
+        articles.MapDelete("/{id}", DeleteArticle).WithName("DeleteArticle");
     }
 
 
@@ -86,9 +86,9 @@ public class ArticlesEndpointDefinition : BaseEndpointDefinition, IEndpointDefin
     }
 
 
-    private async Task<IResult> DeleteArticle(HttpContext context, ISender mediatr, string slug)
+    private async Task<IResult> DeleteArticle(HttpContext context, ISender mediatr, int id)
     {
-        var result = await mediatr.Send(new DeleteArticleCommand(slug));
+        var result = await mediatr.Send(new DeleteArticleCommand(id));
 
         return result.Match(
             article => TypedResults.NoContent(),

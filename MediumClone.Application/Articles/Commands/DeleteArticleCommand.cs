@@ -5,7 +5,7 @@ using MediumClone.Application.Abstractions.Repositories;
 
 namespace MediumClone.Application.Articles.Commands;
 
-public record DeleteArticleCommand(string Slug) : IRequest<ErrorOr<Unit>>;
+public record DeleteArticleCommand(int Id) : IRequest<ErrorOr<Unit>>;
 
 public class DeleteArticleCommandValidator : AbstractValidator<DeleteArticleCommand>
 {
@@ -13,13 +13,13 @@ public class DeleteArticleCommandValidator : AbstractValidator<DeleteArticleComm
     public DeleteArticleCommandValidator(IUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
-        RuleFor(x => x.Slug).NotEmpty().MustAsync(BeExist).WithMessage("Article does not exist");
+        RuleFor(x => x.Id).NotEmpty().MustAsync(BeExist).WithMessage("Article does not exist");
 
 
     }
-    private async Task<bool> BeExist(string slug, CancellationToken cancellationToken)
+    private async Task<bool> BeExist(int Id, CancellationToken cancellationToken)
     {
-        return await _unitOfWork.Articles.FindAsync(a => a.Slug.ToLower() == slug.ToLower()) != null;
+        return await _unitOfWork.Articles.GetByIdAsync(Id) != null;
 
     }
 
@@ -36,7 +36,7 @@ public class DeleteArticleCommandHandler : IRequestHandler<DeleteArticleCommand,
     }
     public async Task<ErrorOr<Unit>> Handle(DeleteArticleCommand request, CancellationToken cancellationToken)
     {
-        var articleToDelete = await _unitOfWork.Articles.FindAsync(a => a.Slug.ToLower() == request.Slug.ToLower());
+        var articleToDelete = await _unitOfWork.Articles.GetByIdAsync(request.Id);
         _unitOfWork.Articles.Delete(articleToDelete);
 
         await _unitOfWork.SaveChangesAsync();
