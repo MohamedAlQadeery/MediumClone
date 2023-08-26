@@ -19,6 +19,11 @@ public class ArticlesMappingConfig : IRegister
             .Map(dest => dest.AuthorId, src => src.userId)
             .Map(dest => dest, src => src.request);
 
+
+        config.NewConfig<(int id, UpdateArticleRequest request), UpdateArticleCommand>()
+      .Map(dest => dest.Id, src => src.id)
+      .Map(dest => dest, src => src.request);
+
         config.NewConfig<Article, ArticleResponse>()
                 .Map(dest => dest.TagNames, src => src.ArticleTags.Select(at => at.Tag.Name).ToList())
                 .Map(dest => dest.Author.FullName, src => $"{src.Author.FirstName} {src.Author.LastName}")

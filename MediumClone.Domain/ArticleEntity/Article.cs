@@ -44,12 +44,23 @@ public class Article : BaseEntity<int>
         Body = body;
 
     }
+    public void Update(string title, string body, List<ArticleTag> articleTags)
+    {
+        Title = title;
+        Slug = title.Replace(" ", "-").ToLower();
+        Body = body;
+        _articleTags.Clear();
+        _articleTags.AddRange(articleTags);
+
+    }
+
 
 
 
     //add tags
     public void AddTags(List<ArticleTag> articleTags)
     {
+        _articleTags.Clear();
         _articleTags.AddRange(articleTags);
     }
 

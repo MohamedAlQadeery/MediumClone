@@ -16,6 +16,7 @@ public class ArticlesEndpointDefinition : BaseEndpointDefinition, IEndpointDefin
     {
         var articles = app.MapGroup("/api/articles");
         articles.MapPost("/", CreateArticle);
+        articles.MapPut("/{id}", UpdateArticle);
         articles.MapGet("", GetAllArticles).AllowAnonymous();
         articles.MapGet("/your-feed", GetYourFeedArticles);
 
@@ -37,6 +38,22 @@ public class ArticlesEndpointDefinition : BaseEndpointDefinition, IEndpointDefin
              //   tag => Results.CreatedAtRoute("GetTagById", new { id = tag.Id },
              //    mapper.Map<Tag>(tag)),
              artileCreated => TypedResults.Ok(mapper.Map<ArticleResponse>(artileCreated)),
+              //productCategory => TypedResults.Ok(productCategory),
+              errors => ResultsProblem(context, errors)
+          );
+    }
+
+    private async Task<IResult> UpdateArticle(HttpContext context, ISender mediatr, IMapper mapper, int id,
+UpdateArticleRequest request)
+    {
+
+        var command = mapper.Map<UpdateArticleCommand>((id, request));
+        var result = await mediatr.Send(command);
+
+        return result.Match(
+             //   tag => Results.CreatedAtRoute("GetTagById", new { id = tag.Id },
+             //    mapper.Map<Tag>(tag)),
+             artileUpdated => TypedResults.Ok(mapper.Map<ArticleResponse>(artileUpdated)),
               //productCategory => TypedResults.Ok(productCategory),
               errors => ResultsProblem(context, errors)
           );
